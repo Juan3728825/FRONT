@@ -18,7 +18,7 @@ loginRouter.get("/google", (req, res) => {
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, { "expiresIn": process.env.EXPIRE_TOKEN });
 
-    res.cookie("ckar", token);
+    res.cookie("ckjm", token);
 
     res.redirect("/v1/inicio");
 

@@ -7,9 +7,9 @@ dotenv.config();
 const dash = Router();
 
 dash.get("/inicio", (req, res) => {
-    if (req.cookies.ckar) {
+    if (req.cookies.ckjm) {
         try {
-            const token = jwt.verify(req.cookies.ckar, process.env.SECRET_KEY);
+            const token = jwt.verify(req.cookies.ckjm, process.env.SECRET_KEY);
             res.render("dash", {
                 "nombre": token.nombre,
                 "foto": token.foto,
@@ -24,9 +24,9 @@ dash.get("/inicio", (req, res) => {
 });
 
 dash.get("/usuario", async (req, res) => {
-    if (req.cookies.ckar) {
+    if (req.cookies.ckjm) {
         try {
-            const token = jwt.verify(req.cookies.ckar, process.env.SECRET_KEY);
+            const token = jwt.verify(req.cookies.ckjm, process.env.SECRET_KEY);
 
             let ruta = "http://localhost:3000/api/user";
 
@@ -61,9 +61,9 @@ dash.get("/usuario", async (req, res) => {
 });
 
 dash.get("/productos", (req, res) => {
-    if (req.cookies.ckar) {
+    if (req.cookies.ckjm) {
         try {
-            const token = jwt.verify(req.cookies.ckar, process.env.SECRET_KEY);
+            const token = jwt.verify(req.cookies.ckjm, process.env.SECRET_KEY);
             res.render("dash", {
                 "nombre": token.nombre,
                 "foto": token.foto,
@@ -79,9 +79,9 @@ dash.get("/productos", (req, res) => {
 });
 
 dash.get("/categorias", (req, res) => {
-    if (req.cookies.ckar) {
+    if (req.cookies.ckjm) {
         try {
-            const token = jwt.verify(req.cookies.ckar, process.env.SECRET_KEY);
+            const token = jwt.verify(req.cookies.ckjm, process.env.SECRET_KEY);
             res.render("dash", {
                 "nombre": token.nombre,
                 "foto": token.foto,
@@ -100,8 +100,20 @@ dash.post("/guardar", (req, res) => {
     if (req.body.name) {
         // res.send("Guardado exitosamente"+ req.body.name);
         let ruta = "http://localhost:3000/api/user";
+        let data = { 
+            name: req.body.name 
+        }
+
         let metodo = "POST";
-        let data = { name: req.body.name }
+
+        if (req.body.id) {
+            data = {
+                id: req.body.name,
+                name: req.body.name
+            }
+
+            metodo = "put";
+        }
 
         let options = {
 
@@ -129,7 +141,7 @@ dash.post("/guardar", (req, res) => {
 })
 
 dash.get("/salir", (req, res) => {
-    res.clearCookie("ckar");
+    res.clearCookie("ckjm");
     res.redirect("/");
 });
 
@@ -137,11 +149,22 @@ dash.get("/edit-user", (req, res)=>{
     const id = req.query.id;
     const name = req.query.name;
 
-    if (req.cookies.ckar) {
+    let datos = {
+        id:id,
+        name:name
+    }
+
+    if (req.cookies.ckjm) {
         try {
             const token = jwt.verify(
-                req.cookies.ckar,
+                req.cookies.ckjm,
                  process.env.SECRET_KEY)
+                 res.render("dash", {
+                    "nombre": token.nombre,
+                    "foto": token.foto,
+                    "menu": 4,
+                    "datos": datos
+                 })
 
         } catch (error) {
             console.error("Error con el token");
