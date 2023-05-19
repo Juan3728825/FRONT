@@ -108,7 +108,7 @@ dash.post("/guardar", (req, res) => {
 
         if (req.body.id) {
             data = {
-                id: req.body.name,
+                id: req.body.id,
                 name: req.body.name
             }
 
