@@ -137,6 +137,18 @@ dash.get("/edit-user", (req, res)=>{
     const id = req.query.id;
     const name = req.query.name;
 
+    if (req.cookies.ckar) {
+        try {
+            const token = jwt.verify(
+                req.cookies.ckar,
+                 process.env.SECRET_KEY)
+
+        } catch (error) {
+            console.error("Error con el token");
+            
+        }
+    }
+
     res.send(id+" "+name);
 })
 
